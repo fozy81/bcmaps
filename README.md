@@ -26,7 +26,7 @@ Provides access to various spatial layers of Scotland, such as
 administrative boundaries, natural resource management boundaries etc.
 All layers are available in the [British National
 Grid](https://spatialreference.org/ref/epsg/27700) projection, which is
-the Scottish Government standard as `sf` objects.
+the Scottish Government standard.
 
 Layers are assessed directly from the
 [spatialdata.gov.scot](https://www.spatialdata.gov.scot/) catalogue. See
@@ -34,18 +34,12 @@ each layer’s individual help file for more detail.
 
 ## Installation
 
-You can install `scotmaps` from CRAN:
-
-``` r
-install.packages("scotmaps")
-```
-
 To install the development version of the `scotmaps` package, you need
-to install the `remotes` package then the `scotmaps` package.
+to install the `devtools` package then the `scotmaps` package.
 
 ``` r
-install.packages("remotes")
-remotes::install_github("fozy81/scotmaps")
+install.packages("devtools")
+devtools::install_github("fozy81/scotmaps")
 ```
 
 ## Usage
@@ -54,12 +48,12 @@ To see the layers that are available, run the `available_layers()`
 function:
 
 ``` r
-library(scotmaps)
+
 available_layers()
 ```
 
-Most layers are accessible by a shortcut function by the same name as
-the object. Then you can use the data as you would any `sf` object. The
+Layers are accessible by a shortcut function by the same name as the
+object. Then you can use the data as you would any `sf` object. The
 first time you run try to access a layer, you will be prompted for
 permission to download that layer to your hard drive. Subsequently that
 layer is available locally for easy future access. For example:
@@ -67,11 +61,11 @@ layer is available locally for easy future access. For example:
 ``` r
 library(sf)
 
-cc <- community_councils()
-plot(st_geometry(cc))
+ma <- marine_areas()
+plot(st_geometry(ma))
 ```
 
-![](tools/readme/unnamed-chunk-6-1.png)<!-- -->
+![](tools/readme/unnamed-chunk-5-1.png)<!-- -->
 
 ### Simple Features objects
 
@@ -83,19 +77,19 @@ library(scotmaps)
 library(sf)
 
 # Load and plot the local authorities
-la <-  local_authorities()
-sl <- la[la$local_authority == "South Lanarkshire", ]
+cc <- community_councils()
+sl <- cc[cc$local_authority == "South Lanarkshire", ]
 plot(st_geometry(sl))
 
 ## Next, load the marine area data, then extract and plot the Clyde area
-cc <- community_councils()
+
 carluke <- cc[cc$cc_name == "Carluke", ]
 plot(st_geometry(carluke), col = "lightseagreen", add = TRUE)
 ```
 
 ![](tools/readme/plot-maps-1.png)<!-- -->
 
-### Respect my local authority
+### Respect My *Local* Authority
 
 A handy layer for creating maps for display is the `local_authorities`
 layer, accessible with the function by the same name. This example also
@@ -148,7 +142,7 @@ The package also contains a couple of handy utility functions:
 ## Getting Help or Reporting an Issue
 
 To report bugs/issues/feature requests, please file an
-[issue](https://github.com/fozy81/openmaps/issues/).
+[issue](https://github.com/fozy81/scotmaps/issues/).
 
 ## How to Contribute
 
