@@ -19,7 +19,7 @@
 #'   cache? Defaults to the value of interactive().
 #' @param force Should you force download the data?
 #'
-#' @return The spatial layer of `community_councils` in the desired class
+#' @return The spatial layer of `community_councils`.
 #'
 #' @export
 #' @examples

@@ -38,7 +38,7 @@ package is a fork of the Province of British Columbia
 
 Provides access to various spatial layers of Scotland, such as administrative
 boundaries, natural resource management boundaries etc. All layers use
-the Open Government Licence and made available in the [27700](https://spatialreference.org/ref/epsg/27700) projection, which is the
+the [Open Government Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) and made available in the [27700](https://spatialreference.org/ref/epsg/27700) projection, which is the
 Scottish Government standard.
 
 Layers are assessed directly from the

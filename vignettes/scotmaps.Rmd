@@ -74,7 +74,7 @@ The `geom_st` recognises the simple feature or `sf` map downloaded layer and plo
 ## Map *all* the Stats
 
 Let's download data from [statistics.gov.scot](https://statistics.gov.scot/home) and display it on a map. 
-```{r, echo=FALSE}
+```{r, eval=FALSE}
 # install.packages("devtools")
 # devtools::install_github("datasciencescotland/opendatascot")
 library(opendatascot)
@@ -121,7 +121,7 @@ rgl::rgl.close()
 
 Let's calculate bicycle parking capacity per person for each local authority in Scotland. 
 
-First, download the bicycle parking data from OpenStreetMap.
+First, download the bicycle parking data from OpenStreetMap. OpenStreetMap is open data, licensed under the [Open Data Commons Open Database License (ODbL)](https://www.openstreetmap.org/copyright) copyright OpenStreetMap contributors. 
 
 ```{r, eval=FALSE}
 # install.packages("osmdata")
