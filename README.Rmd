@@ -111,13 +111,13 @@ ggplot() +
 
 When you first call a layer function scotmaps will remind you when that layer was last updated in your cache with a message. For a number of reasons, it might be necessary to get a fresh layer in your scotmaps cache. The easiest way to update is to use the `force` argument:
 ```{r, eval=FALSE}
-ep <- community_councils(force = TRUE)
+cc <- community_councils(force = TRUE)
 ```
 
 Another option is to actively manage your cache by deleting the old layer and calling the function again:
 ```{r, eval=FALSE}
 delete_cache('community_councils')
-ep <- community_councils(force = TRUE)
+cc <- community_councils()
 ```
 
 ### Vignettes

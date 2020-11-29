@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-<img src="../tools/readme/scotmaps-sticker.png" height="139" align="left"/>
+<img src="../tools/readme/scotmaps-sticker.png" height="139"/>
 
 ## Introduction
 
-Use `scotmaps` to download map layers from [www.spatialdata.gov.scot](www.spatialdata.gov.scot) with single line of R code. 
+Use `scotmaps` to download map layers from [www.spatialdata.gov.scot](www.spatialdata.gov.scot) with single line of R code. Here we provide a few quick examples of how the package can be used.
 
 ## Usage
 
@@ -36,7 +36,7 @@ available_layers()
 
 ### Download Layers
 
-Either use `get_layer("name of your later")` or `name_of_layer()`. For example you can down the marine areas using either of these functions:
+Either use `get_layer("name of your layer")` or `name_of_layer()`. For example you can down the marine areas using either of these functions:
 
 ```{r, eval=FALSE}
 ma <- get_layer("marine_areas")
@@ -49,7 +49,7 @@ The first time you run try to access a layer map files, you will be prompted for
   
 If you have already downloaded a layer you can see if it's cached by using `cached_layers()`
 
-## Start Maping!
+### Start Mapping!
 
 To plot a map we'll use the `ggplot2` library. This package helps to format and present our data layers. 
 
@@ -71,7 +71,7 @@ p
 
 The `geom_st` recognises the simple feature or `sf` map downloaded layer and plots at a spatial object in the correct map projection. 
 
-## Map *all* the Stats
+### Map *all* the Stats
 
 Let's download data from [statistics.gov.scot](https://statistics.gov.scot/home) and display it on a map. 
 ```{r, eval=FALSE}
@@ -82,24 +82,28 @@ library(tidyverse)
 
 # Immunisation data
 immune <- ods_dataset("6-in-1-immunisation", geography = "la")
-
 immune <- immune %>% filter(vaccinationUptake == "vaccinated-by-24-months", 
                      measureType == "ratio",
                      refPeriod == 2018)
 
 immune <- immune %>% mutate(value = as.numeric(value))
 
+# Join to local authority spatial layer
 la_immune <- inner_join(la, immune, by = c("code" = "refArea"))
+
 p2 <- la_immune %>% 
  ggplot() +
   geom_sf(aes(fill = value)) +
-   scale_fill_viridis_c("Ratio") +
-   theme_bw() +
-  labs(title="Vaccinated by 24 months") 
+  scale_fill_viridis_c("Ratio") +
+  theme_bw() +
+  labs(title="6-in-1-immunisation by 24 months (2018)") +
+  theme(plot.title = element_text(hjust = 1))
 
 p2
 
 ```
+
+<img src="../tools/vignette/months.png"/><br>
 
 Looks good but what about in 3D? Don't worry, `rayshader` package has your back.
 
@@ -117,11 +121,11 @@ rgl::rgl.close()
 
 <img src="../tools/vignette/vaccinations.png"/><br>
 
-## Map your own stats
+### Map your own stats
 
 Let's calculate bicycle parking capacity per person for each local authority in Scotland. 
 
-First, download the bicycle parking data from OpenStreetMap. OpenStreetMap is open data, licensed under the [Open Data Commons Open Database License (ODbL)](https://www.openstreetmap.org/copyright) copyright OpenStreetMap contributors. 
+First, download the [bicycle parking](https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking) data from OpenStreetMap. OpenStreetMap is open data, licensed under the [Open Data Commons Open Database License (ODbL)](https://www.openstreetmap.org/copyright) copyright OpenStreetMap contributors. 
 
 ```{r, eval=FALSE}
 # install.packages("osmdata")
@@ -144,7 +148,7 @@ plot(st_geometry(points), col = points$capacity)
 
 <img src="../tools/vignette/all-points.png"/><br>
 
-Join to local authority areas 
+Our OpenStreetMap query returned a wider area than Scotland, so let's join points to associated Scottish local authority areas.
 
 ```{r, eval=FALSE}
 points <- st_join(point, la, join = st_within)
@@ -154,17 +158,16 @@ plot(st_geometry(points[!is.na(points$local_authority), ]), col = points$capacit
 
 <img src="../tools/vignette/scot-points.png"/><br>
 
-Sum capacity available in each authority 
+Now we can sum capacity available in each authority.
 ```{r, eval=FALSE}
-
-capacity <- points %>% group_by(code) %>% 
+capacity <- points %>%
+  group_by(code) %>% 
   summarise(total = sum(capacity)) %>%
   st_set_geometry(NULL) # remove the geometry column 
-
-head(capacity, 5)
 ```
 
-Next, get census population data from opendatascot and calculate bicycle parking capacity per person.
+Next, download census population data using `opendatascot` package and calculate
+bicycle parking capacity per person.
 
 ```{r, eval=FALSE}
 population <- ods_dataset("census-population-2001", geography = "la")
@@ -184,7 +187,7 @@ la_totals <- inner_join(la, total_points, by = c("code" = "code"))
 
 ```
 
-Plot data on map
+Plot data on map:
 
 ```{r, eval=FALSE}
 p3 <- ggplot(la_totals) +
@@ -202,54 +205,58 @@ rgl::rgl.close()
 
 <img src="../tools/vignette/bicycle-map.png"/><br>
 
-But maybe it's better presented as a league table...3D maps not always the best option.
+Alternatively, we could present the data as a league table:
 
 ```{r, eval=FALSE}
 total <- st_set_geometry(la_totals, NULL)
 total <- mutate(total,  "per_100" = ratio * 100)
 
 # make table
-arrange(total, desc(per_100)) %>% 
-select("Local Authority" = local_authority,
-       "Capacity per 100 people" = per_100) %>% 
-knitr::kable()
+arrange(total, desc(per_100)) %>%
+  mutate('No.' = seq_along(local_authority)) %>% 
+  select(No.,
+         "Local Authority" = local_authority,
+         "Capacity per 100 people" = per_100) %>% 
+  knitr::kable()
 
 ```
 
-|Local Authority       | Capacity per 100 people|
-|:---------------------|-----------------------:|
-|City of Edinburgh     |               3.2443650|
-|Dundee City           |               1.1251999|
-|Fife                  |               1.0079301|
-|Glasgow City          |               0.9564451|
-|Midlothian            |               0.9241299|
-|East Lothian          |               0.7825682|
-|Aberdeen City         |               0.7594579|
-|Stirling              |               0.7539554|
-|Highland              |               0.7318801|
-|West Lothian          |               0.6659778|
-|Orkney Islands        |               0.6443232|
-|Perth and Kinross     |               0.4616559|
-|Eilean Siar           |               0.4075164|
-|North Lanarkshire     |               0.3821632|
-|South Lanarkshire     |               0.3431321|
-|West Dunbartonshire   |               0.3127075|
-|Argyll and Bute       |               0.2978994|
-|East Renfrewshire     |               0.2541680|
-|East Dunbartonshire   |               0.2392764|
-|Falkirk               |               0.2383068|
-|South Ayrshire        |               0.2212370|
-|Dumfries and Galloway |               0.2206206|
-|Scottish Borders      |               0.2098085|
-|Renfrewshire          |               0.2024678|
-|Inverclyde            |               0.1686401|
-|Shetland Islands      |               0.1637257|
-|Aberdeenshire         |               0.1617659|
-|Moray                 |               0.1230734|
-|Clackmannanshire      |               0.1206398|
-|North Ayrshire        |               0.0868816|
-|Angus                 |               0.0571956|
-|East Ayrshire         |               0.0382584|
+### Availability of Public Bicycle Parking Capacity
+
+|No.|Local Authority       | Capacity per 100 people|
+|---:|:---------------------|-----------------------:|
+|   1|City of Edinburgh     |               3.2443650|
+|   2|Dundee City           |               1.1251999|
+|   3|Fife                  |               1.0079301|
+|   4|Glasgow City          |               0.9564451|
+|   5|Midlothian            |               0.9241299|
+|   6|East Lothian          |               0.7825682|
+|   7|Aberdeen City         |               0.7594579|
+|   8|Stirling              |               0.7539554|
+|   9|Highland              |               0.7318801|
+|  10|West Lothian          |               0.6659778|
+|  11|Orkney Islands        |               0.6443232|
+|  12|Perth and Kinross     |               0.4616559|
+|  13|Eilean Siar           |               0.4075164|
+|  14|North Lanarkshire     |               0.3821632|
+|  15|South Lanarkshire     |               0.3431321|
+|  16|West Dunbartonshire   |               0.3127075|
+|  17|Argyll and Bute       |               0.2978994|
+|  18|East Renfrewshire     |               0.2541680|
+|  19|East Dunbartonshire   |               0.2392764|
+|  20|Falkirk               |               0.2383068|
+|  21|South Ayrshire        |               0.2212370|
+|  22|Dumfries and Galloway |               0.2206206|
+|  23|Scottish Borders      |               0.2098085|
+|  24|Renfrewshire          |               0.2024678|
+|  25|Inverclyde            |               0.1686401|
+|  26|Shetland Islands      |               0.1637257|
+|  27|Aberdeenshire         |               0.1617659|
+|  28|Moray                 |               0.1230734|
+|  29|Clackmannanshire      |               0.1206398|
+|  30|North Ayrshire        |               0.0868816|
+|  31|Angus                 |               0.0571956|
+|  32|East Ayrshire         |               0.0382584|
 
 
 
