@@ -30,14 +30,16 @@ Downloads](https://cranlogs.r-pkg.org/badges/scotmaps?color=brightgreen)](https:
 
 ## Overview
 
-An [R](http://r-project.org) package of spatial map layers for Scotland.
+An [R](http://r-project.org) package of spatial map layers for Scotland. This
+package is a fork of the Province of British Columbia
+[`bcmaps`](https://github.com/bcgov/bcmaps) package.
 
 ## Features
 
 Provides access to various spatial layers of Scotland, such as administrative
-boundaries, natural resource management boundaries etc. All layers are available
-in the [British National Grid](https://spatialreference.org/ref/epsg/27700)
-projection, which is the Scottish Government standard. 
+boundaries, natural resource management boundaries etc. All layers use
+the Open Government Licence and made available in the [27700](https://spatialreference.org/ref/epsg/27700) projection, which is the
+Scottish Government standard.
 
 Layers are assessed directly from the
 [spatialdata.gov.scot](https://www.spatialdata.gov.scot/) catalogue. See each
@@ -72,7 +74,7 @@ to your hard drive. Subsequently that layer is available locally for easy future
 library(sf)
 
 ma <- marine_areas()
-plot(st_geometry(ma), col = ma$id)
+plot(st_geometry(ma), col = "lightblue")
 ```
 
 ### Simple Features objects
@@ -83,13 +85,12 @@ All layers are returned as [`sf` spatial objects](https://cran.r-project.org/pac
 library(scotmaps)
 library(sf)
 
-# Load and plot the local authorities
+# Load and plot the community councils in South Lanarkshire
 cc <- community_councils()
 sl <- cc[cc$local_authority == "South Lanarkshire", ]
 plot(st_geometry(sl))
 
-## Next, load the marine area data, then extract and plot the Clyde area
-
+# Next, extract and plot the Carluke community council area
 carluke <- cc[cc$cc_name == "Carluke", ]
 plot(st_geometry(carluke), col = "lightseagreen", add = TRUE)
 ```
@@ -118,7 +119,6 @@ Another option is to actively manage your cache by deleting the old layer and ca
 delete_cache('community_councils')
 ep <- community_councils(force = TRUE)
 ```
-
 
 ### Vignettes
 
@@ -161,5 +161,3 @@ The source datasets used in this package come from various sources under open li
     # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
     # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     # See the License for the specific language governing permissions and limitations under the License.
-
-

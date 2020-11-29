@@ -74,7 +74,7 @@ The `geom_st` recognises the simple feature or `sf` map downloaded layer and plo
 ## Map *all* the Stats
 
 Let's download data from [statistics.gov.scot](https://statistics.gov.scot/home) and display it on a map. 
-```{r, results='asis'}
+```{r, echo=FALSE}
 # install.packages("devtools")
 # devtools::install_github("datasciencescotland/opendatascot")
 library(opendatascot)
@@ -101,9 +101,9 @@ p2
 
 ```
 
-Looks good but what about in 3D? Don't worry, `rayshader` package has got your back.
+Looks good but what about in 3D? Don't worry, `rayshader` package has your back.
 
-```{r}
+```{r, eval=FALSE}
 # devtools::install_github("tylermorganwall/rayshader")
 library(rayshader)
 
@@ -115,6 +115,7 @@ rgl::rgl.close()
 
 ```
 
+<img src="../tools/vignette/vaccinations.png"/><br>
 
 ## Map your own stats
 
@@ -141,8 +142,8 @@ points <- st_transform(points, crs = 27700)
 plot(st_geometry(points), col = points$capacity)
 ```
 
-<img src="../tools/vignette/all-points.png" align="left"/>
-  
+<img src="../tools/vignette/all-points.png"/><br>
+
 Join to local authority areas 
 
 ```{r, eval=FALSE}
@@ -151,13 +152,14 @@ points <- st_join(point, la, join = st_within)
 plot(st_geometry(points[!is.na(points$local_authority), ]), col = points$capacity)
 ```
 
-<img src="../tools/vignette/scot-points.png" align="left"/>
-  
+<img src="../tools/vignette/scot-points.png"/><br>
+
 Sum capacity available in each authority 
 ```{r, eval=FALSE}
 
 capacity <- points %>% group_by(code) %>% 
-  summarise(total = sum(capacity)) %>% st_set_geometry(NULL)
+  summarise(total = sum(capacity)) %>%
+  st_set_geometry(NULL) # remove the geometry column 
 
 head(capacity, 5)
 ```
@@ -166,16 +168,18 @@ Next, get census population data from opendatascot and calculate bicycle parking
 
 ```{r, eval=FALSE}
 population <- ods_dataset("census-population-2001", geography = "la")
-population <- population %>%  filter(measureType == "count",
-                                     age == "all",
-                                     gender == "all")
+population <- population %>%
+  filter(measureType == "count",
+         age == "all",
+         gender == "all")
 
 total_points <- inner_join(capacity, population, by = c("code" = "refArea"))
 
-
+# Calculate the pop / bicycle ratio
 total_points$value <- as.numeric(total_points$value)
 total_points <- total_points %>%  mutate(ratio = total / value)
 
+# Join to authority areas
 la_totals <- inner_join(la, total_points, by = c("code" = "code"))
 
 ```
@@ -196,8 +200,8 @@ rgl::rgl.close()
 
 ```
 
-<img src="../tools/vignette/bicycle-map.png" align="left"/>
-  
+<img src="../tools/vignette/bicycle-map.png"/><br>
+
 But maybe it's better presented as a league table...3D maps not always the best option.
 
 ```{r, eval=FALSE}
@@ -206,7 +210,8 @@ total <- mutate(total,  "per_100" = ratio * 100)
 
 # make table
 arrange(total, desc(per_100)) %>% 
-select("Local Authority" = local_authority, "Capacity per 100 people" = per_100) %>% 
+select("Local Authority" = local_authority,
+       "Capacity per 100 people" = per_100) %>% 
 knitr::kable()
 
 ```

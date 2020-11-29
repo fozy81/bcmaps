@@ -7,13 +7,16 @@
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under
+# the License.
 
 #' Community Councils Boundaries
 #'
-#' @param ask Should the function ask the user before downloading the data to a cache? Defaults to the value of interactive().
+#' @param ask Should the function ask the user before downloading the data to a
+#'   cache? Defaults to the value of interactive().
 #' @param force Should you force download the data?
 #'
 #' @return The spatial layer of `community_councils` in the desired class

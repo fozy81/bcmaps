@@ -19,14 +19,16 @@ Downloads](https://cranlogs.r-pkg.org/badges/scotmaps?color=brightgreen)](https:
 ## Overview
 
 An [R](http://r-project.org) package of spatial map layers for Scotland.
+This package is a fork of the Province of British Columbia
+[`bcmaps`](https://github.com/bcgov/bcmaps) package.
 
 ## Features
 
 Provides access to various spatial layers of Scotland, such as
 administrative boundaries, natural resource management boundaries etc.
-All layers are available in the [British National
-Grid](https://spatialreference.org/ref/epsg/27700) projection, which is
-the Scottish Government standard.
+All layers use the Open Government Licence and made available in the
+[British National Grid](https://spatialreference.org/ref/epsg/27700)
+projection, which is the Scottish Government standard.
 
 Layers are assessed directly from the
 [spatialdata.gov.scot](https://www.spatialdata.gov.scot/) catalogue. See
@@ -48,7 +50,6 @@ To see the layers that are available, run the `available_layers()`
 function:
 
 ``` r
-
 available_layers()
 ```
 
@@ -62,7 +63,7 @@ layer is available locally for easy future access. For example:
 library(sf)
 
 ma <- marine_areas()
-plot(st_geometry(ma))
+plot(st_geometry(ma), col = ma$id)
 ```
 
 ![](tools/readme/unnamed-chunk-5-1.png)<!-- -->
