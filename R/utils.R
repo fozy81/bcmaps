@@ -1,3 +1,4 @@
+# Modifications copyright (C) 2020 Tim Foster
 # Copyright 2016 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,85 +10,6 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
-
-#' The size of British Columbia
-#'
-#' Total area, Land area only, or Freshwater area only, in the units of your choosing.
-#'
-#' The sizes are from \href{http://www.statcan.gc.ca/tables-tableaux/sum-som/l01/cst01/phys01-eng.htm}{Statistics Canada}
-#'
-#' @param what Which part of BC? One of `'total'` (default), `'land'`, or `'freshwater'`.
-#' @param units One of `'km2'` (square kilometres; default), `'m2'` (square metres),
-#'          `'ha'` (hectares), `'acres'`, or `'sq_mi'` (square miles)
-#'
-#' @return The area of B.C. in the desired units (numeric vector).
-#' @export
-#'
-#' @examples
-#' ## With no arguments, gives the total area in km^2:
-#' bc_area()
-#'
-#' ## Get the area of the land only, in hectares:
-#' bc_area("land", "ha")
-bc_area <- function(what = "total", units = "km2") {
-  what <- match.arg(what, c("total", "land", "freshwater"))
-  units <- match.arg(units, c("km2", "m2", "ha", "acres", "sq_mi"))
-
-  val_km2 <- switch(what, total = 944735, land = 925186, freshwater = 19549)
-  ret <- switch(units, km2 = val_km2, m2 = km2_m2(val_km2), ha = km2_ha(val_km2),
-                acres = km2_acres(val_km2), sq_mi = km2_sq_mi(val_km2))
-
-  ret <- round(ret, digits = 0)
-  structure(ret, names = paste(what, units, sep = "_"))
-}
-
-km2_m2 <- function(x) {
-  x * 1e6
-}
-
-km2_ha <- function(x) {
-  x * 100
-}
-
-km2_acres <- function(x) {
-  x * 247.105
-}
-
-km2_sq_mi <- function(x) {
-  x * 0.386102
-}
-
-#' Transform a Spatial* object to BC Albers projection
-#'
-#' @param obj The Spatial* or sf object to transform
-#'
-#' @return the Spatial* or sf object in BC Albers projection
-#' @export
-#'
-transform_bc_albers <- function(obj) {
-  UseMethod("transform_bc_albers")
-}
-
-#' @export
-transform_bc_albers.Spatial <- function(obj) {
-  if (!inherits(obj, "Spatial")) {
-    stop("sp_obj must be a Spatial object", call. = FALSE)
-  }
-
-  if (!requireNamespace("rgdal", quietly = TRUE)) {
-    stop("Package rgdal could not be loaded", call. = FALSE)
-  }
-
-  sp::spTransform(obj, sp::CRS("+init=epsg:3005"))
-}
-
-#' @export
-transform_bc_albers.sf <- function(obj) {
-  sf::st_transform(obj, 3005)
-}
-
-#' @export
-transform_bc_albers.sfc <- transform_bc_albers.sf
 
 #' Check and fix polygons that self-intersect, and sometimes can fix orphan holes
 #'
@@ -165,7 +87,6 @@ fix_geo_problems.sfc <- fix_geo_problems.sf
 #' @param x A `SpatialPolygons` or `SpatialPolygonsDataFrame` object
 #'
 #' @return A `SpatialPolygons` or `SpatialPolygonsDataFrame` object
-#' @export
 #'
 #' @examples
 #' if (require(sp)) {
@@ -187,6 +108,7 @@ fix_geo_problems.sfc <- fix_geo_problems.sf
 #'   unioned_spdf <- self_union(spdf)
 #'   unioned_sp <- self_union(spp)
 #' }
+#' @export
 self_union <- function(x) {
   if (!inherits(x, "SpatialPolygons")) {
     stop("x must be a SpatialPolygons or SpatialPolygonsDataFrame")
@@ -321,20 +243,6 @@ get_return_type <- function(x) {
   }
 }
 
-#' Combine Northern Rockies Regional Municipality with Regional Districts
-#'
-#' @inheritParams get_layer
-#'
-#' @return A layer where the Northern Rockies Regional Municipality has been
-#' combined with the Regional Districts to form a full provincial coverage.
-#' @export
-combine_nr_rd <- function(class = c("sf", "sp")) {
-  class <- match.arg(class)
-  rd <- get_layer("regional_districts", class = class)
-  mun <- get_layer("municipalities", class = class)
-  rbind(rd, mun[mun$ADMIN_AREA_ABBREVIATION == "NRRM",])
-}
-
 #' @noRd
 ask <- function(...) {
   choices <- c("Yes", "No")
@@ -342,76 +250,6 @@ ask <- function(...) {
   utils::menu(choices) == which(choices == "Yes")
 }
 
-#' Biogeoclimatic Zone Colours
-#'
-#' Standard colours used to represent Biogeoclimatic Zone colours to be used in plotting.
-#'
-#' @return named vector of hexadecimal colour codes. Names are standard
-#' abbreviations of Zone names.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' if (require(sf) && require(ggplot2)) {
-#'  bec <- bec()
-#'  ggplot() +
-#'    geom_sf(data = bec[bec$ZONE %in% c("BG", "PP"),],
-#'            aes(fill = ZONE, col = ZONE)) +
-#'    scale_fill_manual(values = bec_colors()) +
-#'    scale_colour_manual(values = bec_colours())
-#' }
-#' }
-bec_colours <- function() {
-  bec_colours <- c(BAFA = "#E5D8B1", SWB = "#A3D1AB", BWBS = "#ABE7FF",
-    ESSF = "#9E33D3", CMA = "#E5C7C7", SBS = "#2D8CBD",
-    MH = "#A599FF", CWH = "#208500", ICH = "#85A303",
-    IMA = "#B2B2B2", SBPS = "#36DEFC", MS = "#FF46A3",
-    IDF = "#FFCF00", BG = "#FF0000", PP = "#DE7D00",
-    CDF = "#FFFF00")
-  bec_colours[sort(names(bec_colours))]
-}
-
-#' @rdname bec_colours
-#' @export
-bec_colors <- bec_colours
-
-#' Get an extent/bounding box for British Columbia
-#'
-#' @param class `"sf"`, `"sp"`, or `"raster"`
-#' @param crs coordinate reference system: integer with the EPSG code,
-#' or character with proj4string. Default `3005` (BC Albers).
-#'
-#' @return an object denoting a bounding box of British Columbia,
-#' of the corresponding class specified in `class`. The coordinates will be
-#' in lat-long WGS84 (epsg:4326).
-#' @export
-#'
-#' @examples
-#'\dontrun{
-#'   bc_bbox("sf")
-#'   bc_bbox("sp")
-#'   bc_bbox("raster")
-#'   }
-bc_bbox <- function(class = c("sf", "sp", "raster"), crs = 3005) {
-  class <- match.arg(class)
-
-  if (class == "raster" && !requireNamespace("raster")) {
-    stop("raster package required to make an object of class Extent")
-  }
-
-  sf_bbox <- sf::st_bbox(sf::st_transform(bc_bound(), crs))
-
-  raw_bbox <- unclass(sf_bbox)
-  attr(raw_bbox, "crs") <- NULL
-
-  switch(class,
-         sf = sf_bbox,
-         sp = structure(unname(raw_bbox), .Dim = c(2L, 2L),
-                        .Dimnames = list(c("x", "y"), c("min", "max"))),
-         raster = raster::extent(unname(raw_bbox[c("xmin", "xmax", "ymin", "ymax")]))
-  )
-
-}
 
 set_bc_albers <- function(x) {
   # Only try to set crs if it is sf/sfc, otherwise just return it.
@@ -419,7 +257,7 @@ set_bc_albers <- function(x) {
   if (!inherits(x, c("sf", "sfc"))) {
     return(x)
   }
-  suppressWarnings(sf::st_set_crs(x, 3005))
+  suppressWarnings(sf::st_set_crs(x, 27700))
 }
 
 make_valid <- function(x) {
@@ -441,7 +279,7 @@ clean_geos_version <- function(geos_version = sf::sf_extSoftVersion()["GEOS"]) {
   gsub("-$", "", geos_version)
 }
 
-make_bcdata_fn <- function(fn_title) {
+make_scotdata_fn <- function(fn_title) {
   layers <- shortcut_layers()
   fn_meta <- layers[layers$title == fn_title$title,]
   glue::glue("bcdc_get_data(record = '{fn_meta$record}', resource = '{fn_meta$resource}')")
@@ -450,9 +288,9 @@ make_bcdata_fn <- function(fn_title) {
 
 update_message_once <- function(...) {
   silence <- isTRUE(getOption("silence_update_message"))
-  messaged <- bcmaps_env$bcmaps_update_message
+  messaged <- scotmaps_env$scotmaps_update_message
   if (!silence && !messaged) {
     message(...)
-    assign("bcmaps_update_message", TRUE, envir = bcmaps_env)
+    assign("scotmaps_update_message", TRUE, envir = scotmaps_env)
   }
 }

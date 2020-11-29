@@ -1,4 +1,4 @@
 library(testthat)
-library(bcmaps)
+library(scotmaps)
 
-test_check("bcmaps")
+test_check("scotmaps")

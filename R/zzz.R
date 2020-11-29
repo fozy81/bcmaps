@@ -1,3 +1,4 @@
+# Modifications copyright (C) 2020 Tim Foster
 # Copyright 2017 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -10,18 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-
 .onAttach <- function(libname, pkgname) {
   if (interactive()) {
-    packageStartupMessage("The bcmapsdata package is no longer required to be installed for bcmaps to function.")
-    packageStartupMessage(paste0("Layers are now cached as needed to '", data_dir(),"' using the bcdata package."))
+    packageStartupMessage(paste0("Layers are cached as needed to '", data_dir()))
   }
 }
 
 
-bcmaps_env <- new.env(parent = emptyenv())
+scotmaps_env <- new.env(parent = emptyenv())
 
 .onLoad <- function(...) {
-  assign("bcmaps_update_message", FALSE, envir = bcmaps_env)
+  assign("scotmaps_update_message", FALSE, envir = scotmaps_env)
 }
 

@@ -7,7 +7,8 @@
 add_license_header(
   file,
   year = format(Sys.Date(), "\%Y"),
-  copyright_holder = "Province of British Columbia"
+  copyright_holder = "Province of British Columbia",
+  copyright_modifier = "Tim Foster"
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ add_license_header(
 \item{year}{The year the license should apply (Default current year)}
 
 \item{copyright_holder}{Copyright holder (Default "Province of British Columbia")}
+
+\item{copyright_modifier}{Name of modifier (Default "Tim Foster")}
 }
 \description{
 Add the boilerplate Apache header to the top of a source code file

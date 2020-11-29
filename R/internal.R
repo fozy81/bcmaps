@@ -1,16 +1,23 @@
+# Modifications copyright (C) 2020 Tim Foster
+# Copyright 2017 Province of British Columbia
+#
 #' Add the boilerplate Apache header to the top of a source code file
 #'
 #' @param file Path to the file
 #' @param year The year the license should apply (Default current year)
 #' @param copyright_holder Copyright holder (Default "Province of British Columbia")
+#' @param copyright_modifier Name of modifier (Default "Tim Foster")
 #'
 #'
 #' @return NULL
-add_license_header <- function(file, year = format(Sys.Date(), "%Y"), copyright_holder = "Province of British Columbia") {
+add_license_header <- function(file,
+  year = format(Sys.Date(), "%Y"),
+  copyright_holder = "Province of British Columbia",
+  copyright_modifier = "Tim Foster") {
 
   file_text <- readLines(file)
 
-  license_text <- make_license_header_text(year, copyright_holder)
+  license_text <- make_license_header_text(year, copyright_holder, copyright_modifier)
 
   writeLines(c(license_text, file_text), file)
   message("Adding Apache boilerplate header to the top of ", file)
@@ -18,8 +25,9 @@ add_license_header <- function(file, year = format(Sys.Date(), "%Y"), copyright_
   invisible(TRUE)
 }
 
-make_license_header_text <- function(year = NULL, copyright_holder = NULL) {
-  license_txt <- '# Copyright {YYYY} {COPYRIGHT_HOLDER}
+make_license_header_text <- function(year = NULL, copyright_holder = NULL, copyright_modifier = NULL) {
+  license_txt <- '# Modifications copyright (C) {YYYY} {COPYRIGHT_MODIFIER}
+  # Copyright {YYYY} {COPYRIGHT_HOLDER}
   #
   # Licensed under the Apache License, Version 2.0 (the "License");
   # you may not use this file except in compliance with the License.
@@ -38,6 +46,10 @@ make_license_header_text <- function(year = NULL, copyright_holder = NULL) {
 
   if (!is.null(copyright_holder)) {
     license_txt <- gsub("{COPYRIGHT_HOLDER}", copyright_holder, license_txt, fixed = TRUE)
+  }
+
+  if (!is.null(copyright_holder)) {
+    license_txt <- gsub("{COPYRIGHT_MODIFIER}", copyright_modifier, license_txt, fixed = TRUE)
   }
 
   license_txt

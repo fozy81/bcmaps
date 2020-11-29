@@ -14,13 +14,3 @@ test_that("test that all sf layer function work without error and returns an sf 
     expect_equal(attr(layer, "sf_column"), "geometry")
   }
 })
-
-test_that("test that all sp layer function work without error and return a Spatial* object ", {
-  skip_on_cran()
-  for (i in seq_along(fn_names)) {
-    #cat("\n", fn_names_sp[i]) #for debugging
-    expect_error(layer <- match.fun(fn_names[i])(class = "sp", ask = FALSE), NA)
-    expect_is(layer, "Spatial")
-  }
-})
-
