@@ -1,3 +1,4 @@
+# Modifications copyright (C) 2020 Tim Foster
 # Copyright 2020 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -10,5 +11,5 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-options(bc_data_dir)
+options(scot_data_dir)
 options(silence_update_message_value)

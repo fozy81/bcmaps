@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_shortcuts.R
 \name{make_shortcuts}
 \alias{make_shortcuts}
-\title{Make shortcut functions for data objects in bcmaps from B.C. Data Catalogue}
+\title{Make shortcut functions for data objects in scotmaps from SpatialData.gov.scot}
 \usage{
 make_shortcuts(file = "R/shortcuts.R")
 }
@@ -14,9 +14,9 @@ TRUE (invisibly)
 }
 \description{
 This generates a \code{shortcuts.R} file in the \code{R} directory, with function definitions
-and roxygen blocks for each data object in \code{bcmaps}. This ensures that each
-data object can be accessed directly from \code{bcmaps} by a
-function such as \code{bc_bound()}, or \code{airzones("sp")}.
+and roxygen blocks for each data object in \code{scotmaps}. This ensures that each
+data object can be accessed directly from \code{scotmaps} by a
+function such as \code{community_councils()}, or \code{local_authorities()}.
 }
 \details{
 Run this function each time you add a new data object.
