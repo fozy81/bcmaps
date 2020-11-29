@@ -26,9 +26,11 @@ This package is a fork of the Province of British Columbia
 
 Provides access to various spatial layers of Scotland, such as
 administrative boundaries, natural resource management boundaries etc.
-All layers use the Open Government Licence and made available in the
-[British National Grid](https://spatialreference.org/ref/epsg/27700)
-projection, which is the Scottish Government standard.
+All layers use the [Open Government
+Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
+and made available in the
+[27700](https://spatialreference.org/ref/epsg/27700) projection, which
+is the Scottish Government standard.
 
 Layers are assessed directly from the
 [spatialdata.gov.scot](https://www.spatialdata.gov.scot/) catalogue. See
@@ -63,7 +65,7 @@ layer is available locally for easy future access. For example:
 library(sf)
 
 ma <- marine_areas()
-plot(st_geometry(ma), col = ma$id)
+plot(st_geometry(ma), col = "lightblue")
 ```
 
 ![](tools/readme/unnamed-chunk-5-1.png)<!-- -->
@@ -77,13 +79,12 @@ objects](https://cran.r-project.org/package=sf):
 library(scotmaps)
 library(sf)
 
-# Load and plot the local authorities
+# Load and plot the community councils in South Lanarkshire
 cc <- community_councils()
 sl <- cc[cc$local_authority == "South Lanarkshire", ]
 plot(st_geometry(sl))
 
-## Next, load the marine area data, then extract and plot the Clyde area
-
+# Next, extract and plot the Carluke community council area
 carluke <- cc[cc$cc_name == "Carluke", ]
 plot(st_geometry(carluke), col = "lightseagreen", add = TRUE)
 ```
@@ -115,7 +116,7 @@ reasons, it might be necessary to get a fresh layer in your scotmaps
 cache. The easiest way to update is to use the `force` argument:
 
 ``` r
-ep <- community_councils(force = TRUE)
+cc <- community_councils(force = TRUE)
 ```
 
 Another option is to actively manage your cache by deleting the old
@@ -123,7 +124,7 @@ layer and calling the function again:
 
 ``` r
 delete_cache('community_councils')
-ep <- community_councils(force = TRUE)
+cc <- community_councils()
 ```
 
 ### Vignettes
