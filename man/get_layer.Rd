@@ -10,7 +10,8 @@ get_layer(layer, ask = TRUE, force = FALSE)
 \item{layer}{the name of the layer. The list of available layers can be
 obtained by running \code{available_layers()}}
 
-\item{ask}{Should the function ask the user before downloading the data to a cache? Defaults to the value of interactive().}
+\item{ask}{Should the function ask the user before downloading the data to a
+cache? Defaults to the value of interactive().}
 
 \item{force}{Should you force download the data?}
 }

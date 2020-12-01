@@ -7,12 +7,13 @@
 community_councils(ask = interactive(), force = FALSE)
 }
 \arguments{
-\item{ask}{Should the function ask the user before downloading the data to a cache? Defaults to the value of interactive().}
+\item{ask}{Should the function ask the user before downloading the data to a
+cache? Defaults to the value of interactive().}
 
 \item{force}{Should you force download the data?}
 }
 \value{
-The spatial layer of \code{community_councils} in the desired class
+The spatial layer of \code{community_councils}.
 }
 \description{
 Community Councils Boundaries
