@@ -35,11 +35,10 @@ This Code of Conduct applies both within project spaces and in public spaces
 when an individual is representing the project or its community.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting a project maintainer at andy.teucher@gov.bc.ca or 
-stephanie.hazlitt@gov.bc.ca. All complaints will be reviewed and investigated 
-and will result in a response that is deemed necessary and appropriate to the 
-circumstances. Maintainers are obligated to maintain confidentiality with regard 
-to the reporter of an incident.
+reported by contacting a project maintainer. All complaints will be reviewed and
+investigated and will result in a response that is deemed necessary and
+appropriate to the circumstances. Maintainers are obligated to maintain
+confidentiality with regard to the reporter of an incident.
 
 
 This Code of Conduct is adapted from the [Contributor Covenant][homepage],
