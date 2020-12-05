@@ -16,9 +16,10 @@ knitr::opts_chunk$set(
   fig.width=4,
   fig.height=6
 )
+
 ```
 
-<img src="../tools/readme/scotmaps-sticker.png" height="139"/>
+<img src="../man/figures/readme/scotmaps-sticker.png" height="139"/>
 
 ## Introduction
 

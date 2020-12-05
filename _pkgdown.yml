@@ -1,0 +1,23 @@
+destination: docs
+
+pkgdown:
+  as_is: true
+
+template:
+  params:
+    noindex: true
+
+
+navbar:
+  left:
+    - icon: fa-home
+      href: index.html
+    - text: "Basic use cases"
+      href: articles/scotmaps.html
+    - text: "Reference"
+      href: reference/index.html
+  right:
+    - icon: fa-github fa-lg
+      text: "github"
+      href: https://github.com/fozy81/scotmaps
+

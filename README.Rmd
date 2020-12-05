@@ -1,7 +1,5 @@
 ---
-output:
-  github_document:
-    html_preview: true
+output: github_document
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file and re-knit-->
 
@@ -10,11 +8,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   message=FALSE,
-  fig.path = "tools/readme/"
+  fig.path = "man/figures/readme/"
 )
 ```
 
-# scotmaps <img src="tools/readme/scotmaps-sticker.png" height="139" align="right"/>
+# scotmaps <img src="man/figures/readme/scotmaps-sticker.png" height="139" align="right"/>
 
 ### Version `r read.dcf("DESCRIPTION", "Version")`
 
@@ -52,6 +50,7 @@ To install the development version of the `scotmaps` package, you need to instal
 ```{r, echo=TRUE, eval=FALSE}
 install.packages("devtools")
 devtools::install_github("fozy81/scotmaps")
+
 ```
 
 ## Usage

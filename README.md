@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file and re-knit-->
 
-# scotmaps <img src="tools/readme/scotmaps-sticker.png" height="139" align="right"/>
+# scotmaps <img src="man/figures/readme/scotmaps-sticker.png" height="139" align="right"/>
 
 ### Version 0.0.0.1
 
@@ -68,7 +68,7 @@ ma <- marine_areas()
 plot(st_geometry(ma), col = "lightblue")
 ```
 
-![](tools/readme/unnamed-chunk-5-1.png)<!-- -->
+![](man/figures/readme/unnamed-chunk-5-1.png)<!-- -->
 
 ### Simple Features objects
 
@@ -89,7 +89,7 @@ carluke <- cc[cc$cc_name == "Carluke", ]
 plot(st_geometry(carluke), col = "lightseagreen", add = TRUE)
 ```
 
-![](tools/readme/plot-maps-1.png)<!-- -->
+![](man/figures/readme/plot-maps-1.png)<!-- -->
 
 ### Respect My *Local* Authority
 
@@ -106,7 +106,7 @@ ggplot() +
   theme_minimal()
 ```
 
-![](tools/readme/local_authorities-1.png)<!-- -->
+![](man/figures/readme/local_authorities-1.png)<!-- -->
 
 ### Updating layers
 

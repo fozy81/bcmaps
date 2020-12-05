@@ -12,3 +12,6 @@ CONTRIBUTING.md
 ^\.github$
 ^data-raw$
 add_points.Rmd
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
