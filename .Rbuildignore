@@ -13,3 +13,5 @@ CONTRIBUTING.md
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^RELEASE_TODO$
+^vignettes/figure

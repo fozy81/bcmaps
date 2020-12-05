@@ -1,0 +1,10 @@
+
+1. Before release - rebuild vignette:
+
+knitr::knit("vignettes/scotmaps.Rmd.orig", output = "vignettes/scotmaps.Rmd")
+
+2. Move figure folder into vignette folder
+
+3. Check website builds correctly:
+
+pkgdown::build_site()

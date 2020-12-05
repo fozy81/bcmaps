@@ -9,7 +9,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=4,
+  fig.height=6
+)
 
+```
 
 <img src="images/sticker.png" height="139"/>
 
@@ -21,8 +29,7 @@ Use `scotmaps` to download map layers from [www.spatialdata.gov.scot](www.spatia
 
 See all the layers available:
 
-
-```r
+```{r available-layers, eval=FALSE}
 library(scotmaps)
 available_layers()
 ```
@@ -32,12 +39,11 @@ available_layers()
 
 Either use `get_layer("name of your layer")` or `name_of_layer()`. For example you can down the marine areas using either of these functions:
 
-
-```r
+```{r}
 ma <- get_layer("marine_areas")
-#> marine_areas was updated on 2020-11-28
 # or...
 ma <- marine_areas()
+
 ```
 
 The first time you run try to access a layer map files, you will be prompted for permission to download that layer to your hard drive.
@@ -48,8 +54,7 @@ If you have already downloaded a layer you can see if it's cached by using `cach
 
 To plot a map we'll use the `ggplot2` library. This package helps to format and present our data layers.
 
-
-```r
+```{r}
 library(ggplot2)
 
 la <- local_authorities()
@@ -62,17 +67,15 @@ p <- ggplot(la) +
   theme(panel.grid.major = element_line(colour = "grey60", size = 0.1))
 
 p
-```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
+```
 
 The `geom_st` recognises the simple feature or `sf` map downloaded layer and plots at a spatial object in the correct map projection.
 
 ### Map *all* the Stats
 
 Let's download data from [statistics.gov.scot](https://statistics.gov.scot/home) and display it on a map.
-
-```r
+```{r}
 # install.packages("devtools")
 # devtools::install_github("datasciencescotland/opendatascot")
 library(opendatascot)
@@ -98,28 +101,21 @@ p2 <- la_immune %>%
   theme(plot.title = element_text(hjust = 1))
 
 p2
-```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+```
 
 Looks good but what about in 3D? Don't worry, `rayshader` package has your back.
 
-
-```r
+```{r, message=FALSE}
 # devtools::install_github("tylermorganwall/rayshader")
 library(rayshader)
 
 plot_gg(p2, width = 6, height=2.7)
-                                                                                                     
 render_camera(zoom = 0.4, theta = -45, phi = 30)
 Sys.sleep(0.2)
 render_snapshot()
-```
-
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
-
-```r
 rgl::rgl.close()
+
 ```
 
 
@@ -129,8 +125,7 @@ Let's calculate bicycle parking capacity per person for each local authority in 
 
 First, download the [bicycle parking](https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking) data from OpenStreetMap. OpenStreetMap is open data, licensed under the [Open Data Commons Open Database License (ODbL)](https://www.openstreetmap.org/copyright) copyright OpenStreetMap contributors.
 
-
-```r
+```{r}
 # install.packages("osmdata")
 library(osmdata)
 scot <- getbb ("scotland", format_out = "polygon")
@@ -149,35 +144,26 @@ points <- st_transform(points, crs = 27700)
 plot(st_geometry(points), col = points$capacity)
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
-
 Our OpenStreetMap query returned a wider area than Scotland, so let's join points to associated Scottish local authority areas.
 
-
-```r
+```{r}
 points <- st_join(point, la, join = st_within)
-#> Error in st_join(point, la, join = st_within): object 'point' not found
 # Cropped points with a local authority
 plot(st_geometry(points[!is.na(points$local_authority), ]), col = points$capacity)
-#> Error in plot_sf(x, ...): NA value(s) in bounding box. Trying to plot empty geometries?
 ```
 
 Now we can sum capacity available in each authority.
-
-```r
+```{r}
 capacity <- points %>%
   group_by(code) %>%
   summarise(total = sum(capacity)) %>%
   st_set_geometry(NULL) # remove the geometry column
-#> Error: Must group by variables found in `.data`.
-#> * Column `code` is not found.
 ```
 
 Next, download census population data using `opendatascot` package and calculate
 bicycle parking capacity per person.
 
-
-```r
+```{r}
 population <- ods_dataset("census-population-2001", geography = "la")
 population <- population %>%
   filter(measureType == "count",
@@ -185,49 +171,39 @@ population <- population %>%
          gender == "all")
 
 total_points <- inner_join(capacity, population, by = c("code" = "refArea"))
-#> Error in inner_join(capacity, population, by = c(code = "refArea")): object 'capacity' not found
 
 # Calculate the pop / bicycle ratio
 total_points$value <- as.numeric(total_points$value)
-#> Error in eval(expr, envir, enclos): object 'total_points' not found
 total_points <- total_points %>%  mutate(ratio = total / value)
-#> Error in mutate(., ratio = total/value): object 'total_points' not found
 
 # Join to authority areas
 la_totals <- inner_join(la, total_points, by = c("code" = "code"))
-#> Error in check_join(x, y): object 'total_points' not found
+
 ```
 
 Plot data on map:
 
-
-```r
+```{r}
 p3 <- ggplot(la_totals) +
   geom_sf(aes(fill = ratio), alpha = 0.5) +
   scale_colour_viridis_c()
-#> Error in ggplot(la_totals): object 'la_totals' not found
 
 plot_gg(p3, multicore = TRUE)
-#> Error in methods::is(ggobj, "list"): object 'p3' not found
 render_camera(zoom = 0.4, theta = -45, phi = 30)
-#> Error in render_camera(zoom = 0.4, theta = -45, phi = 30): No rgl window currently open.
 Sys.sleep(0.2)
 render_snapshot()
-#> Error in render_snapshot(): No rgl window currently open.
 rgl::rgl.close()
-#> Error in rgl::rgl.close(): No device opened
+
+
 ```
 
 ### Availability of Public Bicycle Parking Capacity
 
 Alternatively, we could present the data as a league table:
 
-
-```r
+```{r}
 total <- st_set_geometry(la_totals, NULL)
-#> Error in st_set_geometry(la_totals, NULL): object 'la_totals' not found
 total <- mutate(total,  "per_100" = ratio * 100)
-#> Error in mutate(total, per_100 = ratio * 100): object 'total' not found
 
 # make table
 arrange(total, desc(per_100)) %>%
@@ -236,5 +212,5 @@ arrange(total, desc(per_100)) %>%
          "Local Authority" = local_authority,
          "Capacity per 100 people" = per_100) %>%
   knitr::kable()
-#> Error in arrange(total, desc(per_100)): object 'total' not found
+
 ```
