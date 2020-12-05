@@ -14,4 +14,3 @@ CONTRIBUTING.md
 ^docs$
 ^pkgdown$
 ^RELEASE_TODO$
-^vignettes/figure
