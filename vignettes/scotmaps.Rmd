@@ -35,7 +35,6 @@ Either use `get_layer("name of your layer")` or `name_of_layer()`. For example y
 
 ```r
 ma <- get_layer("marine_areas")
-#> marine_areas was updated on 2020-11-28
 # or...
 ma <- marine_areas()
 ```
@@ -64,7 +63,7 @@ p <- ggplot(la) +
 p
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
+![](figure/unnamed-chunk-3-1.png)
 
 The `geom_st` recognises the simple feature or `sf` map downloaded layer and plots at a spatial object in the correct map projection.
 
@@ -94,13 +93,12 @@ p2 <- la_immune %>%
   geom_sf(aes(fill = value)) +
   scale_fill_viridis_c("Ratio") +
   theme_bw() +
-  labs(title="6-in-1-immunisation by 24 months (2018)") +
-  theme(plot.title = element_text(hjust = 1))
+  labs(title="6-in-1-immunisation by 24 months (2018)")
 
 p2
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+![](figure/unnamed-chunk-4-1.png)
 
 Looks good but what about in 3D? Don't worry, `rayshader` package has your back.
 
@@ -108,15 +106,13 @@ Looks good but what about in 3D? Don't worry, `rayshader` package has your back.
 ```r
 # devtools::install_github("tylermorganwall/rayshader")
 library(rayshader)
-
-plot_gg(p2, width = 6, height=2.7)
-                                                                                                     
+plot_gg(p2, multicore = TRUE)
 render_camera(zoom = 0.4, theta = -45, phi = 30)
 Sys.sleep(0.2)
 render_snapshot()
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+![](figure/unnamed-chunk-5-1.png)
 
 ```r
 rgl::rgl.close()
@@ -149,18 +145,18 @@ points <- st_transform(points, crs = 27700)
 plot(st_geometry(points), col = points$capacity)
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![](figure/unnamed-chunk-6-1.png)
 
 Our OpenStreetMap query returned a wider area than Scotland, so let's join points to associated Scottish local authority areas.
 
 
 ```r
-points <- st_join(point, la, join = st_within)
-#> Error in st_join(point, la, join = st_within): object 'point' not found
+points <- st_join(points, la, join = st_within)
 # Cropped points with a local authority
 plot(st_geometry(points[!is.na(points$local_authority), ]), col = points$capacity)
-#> Error in plot_sf(x, ...): NA value(s) in bounding box. Trying to plot empty geometries?
 ```
+
+![](figure/unnamed-chunk-7-1.png)
 
 Now we can sum capacity available in each authority.
 
@@ -169,8 +165,7 @@ capacity <- points %>%
   group_by(code) %>%
   summarise(total = sum(capacity)) %>%
   st_set_geometry(NULL) # remove the geometry column
-#> Error: Must group by variables found in `.data`.
-#> * Column `code` is not found.
+#> `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 Next, download census population data using `opendatascot` package and calculate
@@ -185,17 +180,13 @@ population <- population %>%
          gender == "all")
 
 total_points <- inner_join(capacity, population, by = c("code" = "refArea"))
-#> Error in inner_join(capacity, population, by = c(code = "refArea")): object 'capacity' not found
 
 # Calculate the pop / bicycle ratio
 total_points$value <- as.numeric(total_points$value)
-#> Error in eval(expr, envir, enclos): object 'total_points' not found
 total_points <- total_points %>%  mutate(ratio = total / value)
-#> Error in mutate(., ratio = total/value): object 'total_points' not found
 
 # Join to authority areas
 la_totals <- inner_join(la, total_points, by = c("code" = "code"))
-#> Error in check_join(x, y): object 'total_points' not found
 ```
 
 Plot data on map:
@@ -205,17 +196,18 @@ Plot data on map:
 p3 <- ggplot(la_totals) +
   geom_sf(aes(fill = ratio), alpha = 0.5) +
   scale_colour_viridis_c()
-#> Error in ggplot(la_totals): object 'la_totals' not found
 
 plot_gg(p3, multicore = TRUE)
-#> Error in methods::is(ggobj, "list"): object 'p3' not found
 render_camera(zoom = 0.4, theta = -45, phi = 30)
-#> Error in render_camera(zoom = 0.4, theta = -45, phi = 30): No rgl window currently open.
 Sys.sleep(0.2)
 render_snapshot()
-#> Error in render_snapshot(): No rgl window currently open.
+```
+
+![](figure/unnamed-chunk-10-1.png)
+
+```r
 rgl::rgl.close()
-#> Error in rgl::rgl.close(): No device opened
+
 ```
 
 ### Availability of Public Bicycle Parking Capacity
@@ -225,9 +217,7 @@ Alternatively, we could present the data as a league table:
 
 ```r
 total <- st_set_geometry(la_totals, NULL)
-#> Error in st_set_geometry(la_totals, NULL): object 'la_totals' not found
 total <- mutate(total,  "per_100" = ratio * 100)
-#> Error in mutate(total, per_100 = ratio * 100): object 'total' not found
 
 # make table
 arrange(total, desc(per_100)) %>%
@@ -236,5 +226,41 @@ arrange(total, desc(per_100)) %>%
          "Local Authority" = local_authority,
          "Capacity per 100 people" = per_100) %>%
   knitr::kable()
-#> Error in arrange(total, desc(per_100)): object 'total' not found
 ```
+
+
+
+| No.|Local Authority       | Capacity per 100 people|
+|---:|:---------------------|-----------------------:|
+|   1|City of Edinburgh     |               3.2452566|
+|   2|Dundee City           |               1.1251999|
+|   3|Fife                  |               1.0079301|
+|   4|Glasgow City          |               0.9571373|
+|   5|Midlothian            |               0.9241299|
+|   6|East Lothian          |               0.8458396|
+|   7|Aberdeen City         |               0.7594579|
+|   8|Stirling              |               0.7539554|
+|   9|Highland              |               0.7318801|
+|  10|West Lothian          |               0.6659778|
+|  11|Orkney Islands        |               0.6443232|
+|  12|Perth and Kinross     |               0.4616559|
+|  13|Eilean Siar           |               0.4075164|
+|  14|North Lanarkshire     |               0.3821632|
+|  15|South Lanarkshire     |               0.3431321|
+|  16|West Dunbartonshire   |               0.3127075|
+|  17|Argyll and Bute       |               0.2978994|
+|  18|East Renfrewshire     |               0.2541680|
+|  19|East Dunbartonshire   |               0.2392764|
+|  20|Falkirk               |               0.2383068|
+|  21|South Ayrshire        |               0.2212370|
+|  22|Dumfries and Galloway |               0.2206206|
+|  23|Scottish Borders      |               0.2098085|
+|  24|Renfrewshire          |               0.2024678|
+|  25|Inverclyde            |               0.1686401|
+|  26|Shetland Islands      |               0.1637257|
+|  27|Aberdeenshire         |               0.1617659|
+|  28|Moray                 |               0.1230734|
+|  29|Clackmannanshire      |               0.1206398|
+|  30|North Ayrshire        |               0.0868816|
+|  31|Angus                 |               0.0571956|
+|  32|East Ayrshire         |               0.0382584|

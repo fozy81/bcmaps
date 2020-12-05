@@ -9,13 +9,16 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, include = FALSE}
+```{r, echo = FALSE, message=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.width=4,
-  fig.height=6
+  fig.height=6,
+  root.dir="/vignettes"
 )
+
+library(scotmaps)
 
 ```
 
@@ -109,8 +112,7 @@ Looks good but what about in 3D? Don't worry, `rayshader` package has your back.
 ```{r, message=FALSE}
 # devtools::install_github("tylermorganwall/rayshader")
 library(rayshader)
-
-plot_gg(p2, width = 6, height=2.7)
+plot_gg(p2, multicore = TRUE)
 render_camera(zoom = 0.4, theta = -45, phi = 30)
 Sys.sleep(0.2)
 render_snapshot()
@@ -147,7 +149,7 @@ plot(st_geometry(points), col = points$capacity)
 Our OpenStreetMap query returned a wider area than Scotland, so let's join points to associated Scottish local authority areas.
 
 ```{r}
-points <- st_join(point, la, join = st_within)
+points <- st_join(points, la, join = st_within)
 # Cropped points with a local authority
 plot(st_geometry(points[!is.na(points$local_authority), ]), col = points$capacity)
 ```
