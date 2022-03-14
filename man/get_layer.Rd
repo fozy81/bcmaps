@@ -19,7 +19,8 @@ cache? Defaults to the value of interactive().}
 the layer requested
 }
 \description{
-Get a scotmaps spatial layer
+Layers are assessed directly from the \href{https://www.spatialdata.gov.scot/}{spatialdata.gov.scot}
+catalogue.
 }
 \examples{
 \dontrun{

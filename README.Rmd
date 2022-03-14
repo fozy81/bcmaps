@@ -45,7 +45,8 @@ layer's individual help file for more detail.
 
 ## Installation
 
-To install the development version of the `scotmaps` package, you need to install the `devtools` package then the `scotmaps` package.
+To install the development version of the `scotmaps` package, you need to
+install the `devtools` package then the `scotmaps` package.
 
 ```{r, echo=TRUE, eval=FALSE}
 install.packages("devtools")
@@ -55,7 +56,8 @@ devtools::install_github("fozy81/scotmaps")
 
 ## Usage
 
-To see the layers that are available, run the `available_layers()` function:
+To view all the layers that are available, run the `available_layers()`
+function:
 ```{r, echo=FALSE, warning=FALSE}
 library(scotmaps)
 ```
@@ -64,10 +66,12 @@ library(scotmaps)
 available_layers()
 ```
 
-Layers are accessible by a shortcut function by the same name as the object. 
-Then you can use the data as you would any `sf` object. The first time
-you run try to access a layer, you will be prompted for permission to download that layer
-to your hard drive. Subsequently that layer is available locally for easy future access. For example:
+Layers are accessible by a shortcut function by the same name as the object.
+Then you can use the data as you would any Simple Features
+([`sf`](https://r-spatial.github.io/sf/)) object. The first time you run a layer
+function, you will be prompted for permission to download that layer to your
+hard drive. Subsequently, that layer is stored locally for quick access. For
+example:
 
 ```{r}
 library(sf)
@@ -96,7 +100,10 @@ plot(st_geometry(carluke), col = "lightseagreen", add = TRUE)
 
 ### Respect My *Local* Authority
 
-A handy layer for creating maps for display is the `local_authorities` layer, accessible with the function by the same name. This example also illustrates using the popular [ggplot2](https://ggplot2.tidyverse.org/) package to plot maps in R using `geom_sf`:
+A handy layer for creating maps for display is the `local_authorities` layer,
+accessible with the function by the same name. This example also illustrates
+using the popular [ggplot2](https://ggplot2.tidyverse.org/) package to plot maps
+in R using `geom_sf`:
 
 ```{r local_authorities}
 library(ggplot2)
@@ -108,7 +115,10 @@ ggplot() +
 
 ### Updating layers
 
-When you first call a layer function scotmaps will remind you when that layer was last updated in your cache with a message. For a number of reasons, it might be necessary to get a fresh layer in your scotmaps cache. The easiest way to update is to use the `force` argument:
+When you first call a layer function scotmaps will remind you when that layer
+was last updated in your cache with a message. For a number of reasons, it might
+be necessary to get a fresh layer in your scotmaps cache. The easiest way to
+update is to use the `force` argument:
 ```{r, eval=FALSE}
 cc <- community_councils(force = TRUE)
 ```

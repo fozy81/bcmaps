@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![R build
 status](https://github.com/fozy81/scotmaps/workflows/R-CMD-check/badge.svg)](https://github.com/fozy81/scotmaps/actions)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/scotmaps)](https://cran.r-project.org/package=scotmaps)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/scotmaps)](https://cran.r-project.org/package=scotmaps)
 [![CRAN
 Downloads](https://cranlogs.r-pkg.org/badges/scotmaps?color=brightgreen)](https://CRAN.R-project.org/package=scotmaps)
 <!-- badges: end -->
@@ -48,7 +48,7 @@ devtools::install_github("fozy81/scotmaps")
 
 ## Usage
 
-To see the layers that are available, run the `available_layers()`
+To view all the layers that are available, run the `available_layers()`
 function:
 
 ``` r
@@ -56,10 +56,11 @@ available_layers()
 ```
 
 Layers are accessible by a shortcut function by the same name as the
-object. Then you can use the data as you would any `sf` object. The
-first time you run try to access a layer, you will be prompted for
-permission to download that layer to your hard drive. Subsequently that
-layer is available locally for easy future access. For example:
+object. Then you can use the data as you would any Simple Features
+([`sf`](https://r-spatial.github.io/sf/)) object. The first time you run
+a layer function, you will be prompted for permission to download that
+layer to your hard drive. Subsequently, that layer is stored locally for
+quick access. For example:
 
 ``` r
 library(sf)

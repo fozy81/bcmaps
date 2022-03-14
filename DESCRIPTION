@@ -7,15 +7,16 @@ Authors@R: c(person("Tim", "Foster", email = "fozy81@hotmail.com",
          role = "aut", comment = "bcmaps author"),
   person("Stephanie", "Hazlitt", email = "stephanie.hazlitt@gov.bc.ca",
          role = "aut", comment = "bcmaps author"),
-  person("Sam", "Albers", email = "sam.albers@gov.bc.ca", role = "aut", comment = "bcmaps author"),
+  person("Sam", "Albers", email = "sam.albers@gov.bc.ca", role = "aut",
+          comment = "bcmaps author"),
   person("Province of British Columbia", role = "cph", comment = "bcmaps copyright"))
 Description: Provides access to various spatial layers for Scotland, such as 
     administrative boundaries, neighbourhood statistical units, etc. 
-    Most layers are imported from as 'sf' or 'Spatial' objects
-    through function calls in this package. All layers are in British National
-    Grid 27700 <https://spatialreference.org/ref/epsg/27700/>. Deeply indebted
-    to 'bcmaps' package. This is a modified fork of 'bcmaps' Version 0.18.1.9000
-    <https://CRAN.R-project.org/package=bcmaps>.
+    Layers are imported from <https://www.spatialdata.gov.scot/> spatialdata.gov.scot
+    catalogue as 'sf' through function calls in this package. All layers are in
+    British National Grid 27700 <https://spatialreference.org/ref/epsg/27700/>.
+    Deeply indebted to 'bcmaps' package. This is a modified fork of 'bcmaps'
+    Version 0.18.1.9000 <https://CRAN.R-project.org/package=bcmaps>.
 License: Apache License (== 2.0) | file LICENSE
 URL: https://github.com/fozy81/scotmaps
 BugReports: https://github.com/fozy81/scotmaps/issues
@@ -46,5 +47,5 @@ Suggests:
 VignetteBuilder: knitr
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Encoding: UTF-8

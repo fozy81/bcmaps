@@ -22,6 +22,8 @@ library(scotmaps)
 
 ```
 
+<!-- scotmaps.Rmd is generated from scotmaps.Rmd.orig Please edit that file and re-knit knitr::knit("vignettes/scotmaps.Rmd.orig", output = "vignettes/longexample.Rmd") -->
+
 <img src="images/sticker.png" height="139"/>
 
 ## Introduction
@@ -130,9 +132,11 @@ First, download the [bicycle parking](https://wiki.openstreetmap.org/wiki/Tag:am
 ```{r}
 # install.packages("osmdata")
 library(osmdata)
-scot <- getbb ("scotland", format_out = "polygon")
-bicycles <- opq(scot[[8]][3]) %>%
-  add_osm_feature(key = "amenity", value = "bicycle_parking", value_exact = TRUE) %>%
+scot <- getbb("scotland", format_out = "polygon")
+bicycles <- opq(scot[[5]][3]) %>%
+  add_osm_feature(key = "amenity",
+                  value = "bicycle_parking",
+                  value_exact = TRUE) %>%
   osmdata_sf()
 
 # Use osm point data

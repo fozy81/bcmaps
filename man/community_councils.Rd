@@ -16,7 +16,8 @@ cache? Defaults to the value of interactive().}
 The spatial layer of \code{community_councils}.
 }
 \description{
-Community Councils Boundaries
+Layers are assessed directly from the \href{https://www.spatialdata.gov.scot/}{spatialdata.gov.scot}
+catalogue.
 }
 \examples{
 \dontrun{

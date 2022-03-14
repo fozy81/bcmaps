@@ -15,6 +15,8 @@
 
 #' Community Councils Boundaries
 #'
+#' Layers are assessed directly from the [spatialdata.gov.scot](https://www.spatialdata.gov.scot/)
+#' catalogue.
 #' @param ask Should the function ask the user before downloading the data to a
 #'   cache? Defaults to the value of interactive().
 #' @param force Should you force download the data?

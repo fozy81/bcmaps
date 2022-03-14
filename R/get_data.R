@@ -13,6 +13,9 @@
 
 #' Get a scotmaps spatial layer
 #'
+#' Layers are assessed directly from the [spatialdata.gov.scot](https://www.spatialdata.gov.scot/)
+#' catalogue.
+#'
 #' @inheritParams community_councils
 #' @param layer the name of the layer. The list of available layers can be
 #' obtained by running `available_layers()`
@@ -96,7 +99,6 @@ print.avail_layers <- function(x, ...) {
 
 shortcut_layers <- function() {
   al <- available_layers()
-  al <- al[al$using_shortcuts, ]
   al <- al[!is.na(al$layer_name), ]
   names(al)[1:2] <- c("layer_name", "title")
   # structure(al, class = c("avail_layers", "tbl_df", "tbl", "data.frame"))
@@ -111,26 +113,46 @@ get_catalogue_data <- function(what, release = "latest", force = FALSE, ask = TR
   dir <- data_dir()
   fpath <- file.path(dir, fname)
   layers_df <- shortcut_layers()
-
   if (!file.exists(fpath) | force) {
     check_write_to_data_dir(dir, ask)
     recordid <- layers_df$record[layers_df$layer_name == what]
     resourceid <- layers_df$resource[layers_df$layer_name == what]
+    url <- layers_df$url[layers_df$layer_name == what]
+    zip <- layers_df$zip[layers_df$layer_name == what]
+    layer_type <- layers_df$layer[layers_df$layer_name == what]
     # Not all data on spatialhub...need better way to handle different data sources
-    if(what == "marine_areas") {
-      data <- readr::read_file("http://msmap1.atkinsgeospatial.com/geoserver/nmpwfs/ows?token=d46ffd2a-e192-4e51-8a6a-b3292c20f1ee&request=GetFeature&service=WFS&version=1.1.0&typeName=administrative_units_scottish_marine_regions&outputFormat=json")
-    } else {
-    data <- readr::read_file(paste0(
-      "https://geo.spatialhub.scot/geoserver/",
-      resourceid,
-      "/wfs?authkey=b85aa063-d598-4582-8e45-e7e6048718fc&request=GetFeature&service=WFS&version=1.1.0&typeName=",
-      recordid,
-      "&outputFormat=json"
-    ))
+    wd <- getwd()
+    td <- tempdir()
+    setwd(td)
+    if (zip) {
+      temp <- tempfile(fileext = ".zip")
+      utils::download.file(url, temp)
+      utils::unzip(temp)
+      data <- dir(tempdir(), "*.shp$")
+      layer <- sub(".shp$", "", data)
     }
-    layer <- st_read(data, quiet = TRUE)
+    else if (!is.na(url)) {
+      data <- readr::read_file(url)
+    }
+    else {
+      data <- readr::read_file(paste0(
+        "https://geo.spatialhub.scot/geoserver/",
+        resourceid,
+        "/wfs?authkey=b85aa063-d598-4582-8e45-e7e6048718fc&request=GetFeature&service=WFS&version=1.1.0&typeName=",
+        recordid,
+        "&outputFormat=json"
+      ))
+      layer <- NULL
+    }
+    if (is.na(layer_type)) {
+      layer <- st_read(dsn = data, quiet = TRUE)
+    } else {
+      layer <- st_read(dsn = data, layer = layer_type, quiet = TRUE)
+    }
     layer <- structure(layer, time_downloaded = Sys.time())
     saveRDS(layer, fpath)
+    unlink(dir(td))
+    setwd(wd)
   } else {
     layer <- readRDS(fpath)
     time <- attributes(layer)$time_downloaded

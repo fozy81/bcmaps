@@ -1,4 +1,6 @@
-layer_name,title,resource,record, local,using_shortcuts
-community_councils,Scottish Community Council Boundaries,sh_commcnc,pub_commcnc,TRUE,TRUE
-local_authorities,Scottish Local Authorities Boundaries,sh_las,pub_las,TRUE,TRUE
-marine_areas,Scottish Marine Area,nmpwfs,administrative_units_scottish_marine_regions,TRUE,TRUE
+layer_name,title,resource,record,zip,layer,url
+community_councils,Scottish Community Council Boundaries,sh_commcnc,pub_commcnc,FALSE,,
+local_authorities,Scottish Local Authorities Boundaries,sh_las,pub_las,FALSE,,
+marine_areas,Scottish Marine Area,nmpwfs,administrative_units_scottish_marine_regions,FALSE,,http://msmap1.atkinsgeospatial.com/geoserver/nmpwfs/ows?token=d46ffd2a-e192-4e51-8a6a-b3292c20f1ee&request=GetFeature&service=WFS&version=1.1.0&typeName=administrative_units_scottish_marine_regions&outputFormat=json
+data_zone_2011,Data Zone Boundaries 2011,,,TRUE,,http://sedsh127.sedsh.gov.uk/Atom_data/ScotGov/ZippedShapefiles/SG_DataZoneBdry_2011.zip
+water_monitoring_sites,Water monitoring sites,,,FALSE,OGRGeoJSON,https://map.sepa.org.uk/arcgis/rest/services/WMS_Environmental_Monitoring/MapServer/11/query?where=OBJECTID+is+not+null&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&having=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentOnly=false&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=geojson

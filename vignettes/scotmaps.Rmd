@@ -9,13 +9,13 @@ editor_options:
   chunk_output_type: console
 ---
 
-
+<!-- scotmaps.Rmd is generated from scotmaps.Rmd.orig Please edit that file and re-knit knitr::knit("vignettes/scotmaps.Rmd.orig", output = "vignettes/longexample.Rmd") -->
 
 <img src="images/sticker.png" height="139"/>
 
 ## Introduction
 
-Use `scotmaps` to download map layers from [www.spatialdata.gov.scot](www.spatialdata.gov.scot) with single line of R code. Here we provide a few quick examples of how the package can be used.
+Use `scotmaps` to download map layers from [www.spatialdata.gov.scot](https://www.spatialdata.gov.scot) with single line of R code. Here we provide a few quick examples of how the package can be used.
 
 ## Usage
 
@@ -39,9 +39,9 @@ ma <- get_layer("marine_areas")
 ma <- marine_areas()
 ```
 
-The first time you run try to access a layer map files, you will be prompted for permission to download that layer to your hard drive.
+The first time you run a layer function, you will be prompted for permission to download that layer to your hard drive.
 
-If you have already downloaded a layer you can see if it's cached by using `cached_layers()`
+If you have already downloaded a layer you can see if it's cached by using `cached_layers()`.
 
 ### Start Mapping!
 
@@ -130,8 +130,10 @@ First, download the [bicycle parking](https://wiki.openstreetmap.org/wiki/Tag:am
 # install.packages("osmdata")
 library(osmdata)
 scot <- getbb ("scotland", format_out = "polygon")
-bicycles <- opq(scot[[8]][3]) %>%
-  add_osm_feature(key = "amenity", value = "bicycle_parking", value_exact = TRUE) %>%
+bicycles <- opq(scot[[3]][3]) %>%
+  add_osm_feature(key = "amenity",
+                  value = "bicycle_parking",
+                  value_exact = TRUE) %>%
   osmdata_sf()
 
 # Use osm point data
