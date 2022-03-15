@@ -175,6 +175,8 @@ bicycle parking capacity per person.
 
 
 ```r
+# devtools::install_github("datasciencescotland/opendatascot")
+library(opendatascot)
 population <- ods_dataset("census-population-2001", geography = "la")
 population <- population %>%
   filter(measureType == "count",
@@ -195,6 +197,8 @@ Plot data on map:
 
 
 ```r
+# devtools::install_github("tylermorganwall/rayshader")
+library(rayshader)
 p3 <- ggplot(la_totals) +
   geom_sf(aes(fill = ratio), alpha = 0.5) +
   scale_colour_viridis_c()
