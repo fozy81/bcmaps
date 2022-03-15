@@ -96,7 +96,9 @@
 </h2>
 <p>See all the layers available:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/fozy81/scotmaps" class="external-link">scotmaps</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"fozy81/scotmaps"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/fozy81/scotmaps" class="external-link">scotmaps</a></span><span class="op">)</span>
 <span class="fu"><a href="../reference/available_layers.html">available_layers</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="section level3">
 <h3 id="download-layers">Download Layers<a class="anchor" aria-label="anchor" href="#download-layers"></a>
@@ -114,7 +116,8 @@
 </h3>
 <p>To plot a map we’ll use the <code>ggplot2</code> library. This package helps to format and present our data layers.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="co"># install.packages("ggplot2")</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">la</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_authorities.html">local_authorities</a></span><span class="op">(</span><span class="op">)</span>
 
@@ -135,6 +138,7 @@
 <p>Let’s download data from <a href="https://statistics.gov.scot/home" class="external-link">statistics.gov.scot</a> and display it on a map.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="co"># install.packages("tidyverse")</span>
 <span class="co"># devtools::install_github("datasciencescotland/opendatascot")</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">opendatascot</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
@@ -179,6 +183,7 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("osmdata")</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/osmdata/" class="external-link">osmdata</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
 <span class="va">scot</span> <span class="op">&lt;-</span> <span class="fu">getbb</span> <span class="op">(</span><span class="st">"scotland"</span>, format_out <span class="op">=</span> <span class="st">"polygon"</span><span class="op">)</span>
 <span class="va">bicycles</span> <span class="op">&lt;-</span> <span class="fu">opq</span><span class="op">(</span><span class="va">scot</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu">add_osm_feature</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"amenity"</span>,
@@ -198,7 +203,10 @@
 <p><img src="figure/unnamed-chunk-6-1.png"></p>
 <p>Our OpenStreetMap query returned a wider area than Scotland, so let’s join points to associated Scottish local authority areas.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_join</a></span><span class="op">(</span><span class="va">points</span>, <span class="va">la</span>, join <span class="op">=</span> <span class="va">st_within</span><span class="op">)</span>
+<code class="sourceCode R"><span class="co"># devtools::install_github("fozy81/scotmaps")</span>
+<span class="co"># library(scotmaps)</span>
+<span class="va">la</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_authorities.html">local_authorities</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_join</a></span><span class="op">(</span><span class="va">points</span>, <span class="va">la</span>, join <span class="op">=</span> <span class="va">st_within</span><span class="op">)</span>
 <span class="co"># Cropped points with a local authority</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">points</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">points</span><span class="op">$</span><span class="va">local_authority</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">points</span><span class="op">$</span><span class="va">capacity</span><span class="op">)</span></code></pre></div>
 <p><img src="figure/unnamed-chunk-7-1.png"></p>
