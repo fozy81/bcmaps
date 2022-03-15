@@ -23,10 +23,11 @@ See all the layers available:
 
 
 ```r
+install.packages("devtools")
+devtools::install_github("fozy81/scotmaps")
 library(scotmaps)
 available_layers()
 ```
-
 
 ### Download Layers
 
@@ -49,6 +50,7 @@ To plot a map we'll use the `ggplot2` library. This package helps to format and 
 
 
 ```r
+# install.packages("ggplot2")
 library(ggplot2)
 
 la <- local_authorities()
@@ -73,6 +75,7 @@ Let's download data from [statistics.gov.scot](https://statistics.gov.scot/home)
 
 ```r
 # install.packages("devtools")
+# install.packages("tidyverse")
 # devtools::install_github("datasciencescotland/opendatascot")
 library(opendatascot)
 library(tidyverse)
@@ -118,7 +121,6 @@ render_snapshot()
 rgl::rgl.close()
 ```
 
-
 ### Map your own stats
 
 Let's calculate bicycle parking capacity per person for each local authority in Scotland.
@@ -129,6 +131,7 @@ First, download the [bicycle parking](https://wiki.openstreetmap.org/wiki/Tag:am
 ```r
 # install.packages("osmdata")
 library(osmdata)
+library(tidyverse)
 scot <- getbb ("scotland", format_out = "polygon")
 bicycles <- opq(scot[[3]][3]) %>%
   add_osm_feature(key = "amenity",
@@ -151,8 +154,10 @@ plot(st_geometry(points), col = points$capacity)
 
 Our OpenStreetMap query returned a wider area than Scotland, so let's join points to associated Scottish local authority areas.
 
-
 ```r
+# devtools::install_github("fozy81/scotmaps")
+# library(scotmaps)
+la <- local_authorities()
 points <- st_join(points, la, join = st_within)
 # Cropped points with a local authority
 plot(st_geometry(points[!is.na(points$local_authority), ]), col = points$capacity)
