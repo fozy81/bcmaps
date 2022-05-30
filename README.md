@@ -18,13 +18,14 @@ Downloads](https://cranlogs.r-pkg.org/badges/scotmaps?color=brightgreen)](https:
 
 ## Overview
 
-An [R](http://r-project.org) package of spatial map layers for Scotland.
-This package is a fork of the Province of British Columbia
+An [R](http://r-project.org) package providing access to spatial map
+layers for Scotland. All layers have an open data licence. This package
+is a fork of the Province of British Columbia
 [`bcmaps`](https://github.com/bcgov/bcmaps) package.
 
 ## Features
 
-Provides access to various spatial layers of Scotland, such as
+Download, cache and map spatial layers of Scotland, such as
 administrative boundaries, natural resource management boundaries etc.
 All layers use the [Open Government
 Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
@@ -52,19 +53,30 @@ To view all the layers that are available, run the `available_layers()`
 function:
 
 ``` r
+library(scotmaps)
 available_layers()
 ```
 
-Layers are accessible by a shortcut function by the same name as the
-object. Then you can use the data as you would any Simple Features
-([`sf`](https://r-spatial.github.io/sf/)) object. The first time you run
-a layer function, you will be prompted for permission to download that
-layer to your hard drive. Subsequently, that layer is stored locally for
-quick access. For example:
+    # A tibble: 5 × 2
+      layer_name             title                                
+    * <chr>                  <chr>                                
+    1 community_councils     Scottish Community Council Boundaries
+    2 local_authorities      Scottish Local Authorities Boundaries
+    3 marine_areas           Scottish Marine Area                 
+    4 data_zone_2011         Data Zone Boundaries 2011            
+    5 water_monitoring_sites Water monitoring sites               
+
+    ------------------------
+    All layers are downloaded from the internet and cached
+    on your hard drive at ~/.local/share/scotmaps.
+
+Download layers by using a shortcut function by the same name as the
+layer_name for instance `marine_areas()`. The first time you run a layer
+function, you will be prompted for permission to download that layer to
+your hard drive. Subsequently, that layer is stored locally for quick
+access. For example:
 
 ``` r
-library(sf)
-
 ma <- marine_areas()
 plot(st_geometry(ma), col = "lightblue")
 ```
@@ -77,9 +89,6 @@ All layers are returned as [`sf` spatial
 objects](https://cran.r-project.org/package=sf):
 
 ``` r
-library(scotmaps)
-library(sf)
-
 # Load and plot the community councils in South Lanarkshire
 cc <- community_councils()
 sl <- cc[cc$local_authority == "South Lanarkshire", ]
