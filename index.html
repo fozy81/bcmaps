@@ -86,17 +86,16 @@
 <h3 id="version-0001">Version 0.0.0.1<a class="anchor" aria-label="anchor" href="#version-0001"></a>
 </h3>
 <!-- badges: start -->
-
 </div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>An <a href="http://r-project.org" class="external-link">R</a> package of spatial map layers for Scotland. This package is a fork of the Province of British Columbia <a href="https://github.com/bcgov/bcmaps" class="external-link"><code>bcmaps</code></a> package.</p>
+<p>An <a href="http://r-project.org" class="external-link">R</a> package providing access to spatial map layers for Scotland. All layers have an open data licence. This package is a fork of the Province of British Columbia <a href="https://github.com/bcgov/bcmaps" class="external-link"><code>bcmaps</code></a> package.</p>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
-<p>Provides access to various spatial layers of Scotland, such as administrative boundaries, natural resource management boundaries etc. All layers use the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" class="external-link">Open Government Licence</a> and made available in the <a href="https://spatialreference.org/ref/epsg/27700" class="external-link">27700</a> projection, which is the Scottish Government standard.</p>
+<p>Download, cache and map spatial layers of Scotland, such as administrative boundaries, natural resource management boundaries etc. All layers use the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" class="external-link">Open Government Licence</a> and made available in the <a href="https://spatialreference.org/ref/epsg/27700" class="external-link">27700</a> projection, which is the Scottish Government standard.</p>
 <p>Layers are assessed directly from the <a href="https://www.spatialdata.gov.scot/" class="external-link">spatialdata.gov.scot</a> catalogue. See each layer’s individual help file for more detail.</p>
 </div>
 <div class="section level2">
@@ -112,23 +111,31 @@
 </h2>
 <p>To view all the layers that are available, run the <code><a href="reference/available_layers.html">available_layers()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/available_layers.html">available_layers</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Layers are accessible by a shortcut function by the same name as the object. Then you can use the data as you would any Simple Features (<a href="https://r-spatial.github.io/sf/" class="external-link"><code>sf</code></a>) object. The first time you run a layer function, you will be prompted for permission to download that layer to your hard drive. Subsequently, that layer is stored locally for quick access. For example:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-
-<span class="va">ma</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/marine_areas.html">marine_areas</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/fozy81/scotmaps" class="external-link">scotmaps</a></span><span class="op">)</span>
+<span class="fu"><a href="reference/available_layers.html">available_layers</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># A tibble: 5 × 2</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  layer_name             title                                </span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">*</span><span class="st"> </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">                  </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">                                </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="dv">1</span> community_councils     Scottish Community Council Boundaries</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="dv">2</span> local_authorities      Scottish Local Authorities Boundaries</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="dv">3</span> marine_areas           Scottish Marine Area                 </span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="dv">4</span> data_zone_<span class="dv">2011</span>         Data Zone Boundaries <span class="dv">2011</span>            </span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="dv">5</span> water_monitoring_sites Water monitoring sites               </span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="op">------------------------</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>All layers are downloaded from the internet and cached</span>
+<span id="cb3-12"><a href="#cb3-12"></a>on your hard drive at <span class="op">~</span><span class="er">/</span>.local<span class="op">/</span>share<span class="op">/</span>scotmaps.</span></code></pre></div>
+<p>Download layers by using a shortcut function by the same name as the layer_name for instance <code><a href="reference/marine_areas.html">marine_areas()</a></code>. The first time you run a layer function, you will be prompted for permission to download that layer to your hard drive. Subsequently, that layer is stored locally for quick access. For example:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ma</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/marine_areas.html">marine_areas</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">ma</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/readme/unnamed-chunk-5-1.png"><!-- --></p>
 <div class="section level3">
 <h3 id="simple-features-objects">Simple Features objects<a class="anchor" aria-label="anchor" href="#simple-features-objects"></a>
 </h3>
 <p>All layers are returned as <a href="https://cran.r-project.org/package=sf" class="external-link"><code>sf</code> spatial objects</a>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/fozy81/scotmaps" class="external-link">scotmaps</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-
-<span class="co"># Load and plot the community councils in South Lanarkshire</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Load and plot the community councils in South Lanarkshire</span>
 <span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/community_councils.html">community_councils</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">sl</span> <span class="op">&lt;-</span> <span class="va">cc</span><span class="op">[</span><span class="va">cc</span><span class="op">$</span><span class="va">local_authority</span> <span class="op">==</span> <span class="st">"South Lanarkshire"</span>, <span class="op">]</span>
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">sl</span><span class="op">)</span><span class="op">)</span>
@@ -142,7 +149,7 @@
 <h3 id="respect-my-local-authority">Respect My <em>Local</em> Authority<a class="anchor" aria-label="anchor" href="#respect-my-local-authority"></a>
 </h3>
 <p>A handy layer for creating maps for display is the <code>local_authorities</code> layer, accessible with the function by the same name. This example also illustrates using the popular <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> package to plot maps in R using <code>geom_sf</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="reference/local_authorities.html">local_authorities</a></span><span class="op">(</span><span class="op">)</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">local_authority</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -154,10 +161,10 @@
 <h3 id="updating-layers">Updating layers<a class="anchor" aria-label="anchor" href="#updating-layers"></a>
 </h3>
 <p>When you first call a layer function scotmaps will remind you when that layer was last updated in your cache with a message. For a number of reasons, it might be necessary to get a fresh layer in your scotmaps cache. The easiest way to update is to use the <code>force</code> argument:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/community_councils.html">community_councils</a></span><span class="op">(</span>force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Another option is to actively manage your cache by deleting the old layer and calling the function again:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/delete_cache.html">delete_cache</a></span><span class="op">(</span><span class="st">'community_councils'</span><span class="op">)</span>
 <span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/community_councils.html">community_councils</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
@@ -197,18 +204,18 @@
 <div class="section level2">
 <h2 id="licence">Licence<a class="anchor" aria-label="anchor" href="#licence"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Modifications copyright (C) 2020 Tim Foster</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># Copyright 2017 Province of British Columbia</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># </span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># Licensed under the Apache License, Version 2.0 (the "License");</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co"># you may not use this file except in compliance with the License.</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co"># You may obtain a copy of the License at</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># </span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co"># http://www.apache.org/licenses/LICENSE-2.0</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># </span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="co"># Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="co"># See the License for the specific language governing permissions and limitations under the License.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Modifications copyright (C) 2020 Tim Foster</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># Copyright 2017 Province of British Columbia</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co"># </span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># Licensed under the Apache License, Version 2.0 (the "License");</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co"># you may not use this file except in compliance with the License.</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co"># You may obtain a copy of the License at</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co"># </span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co"># http://www.apache.org/licenses/LICENSE-2.0</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co"># </span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co"># Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co"># See the License for the specific language governing permissions and limitations under the License.</span></span></code></pre></div>
 </div>
 </div>
   </div>
@@ -278,7 +285,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
