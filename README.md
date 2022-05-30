@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file and re-knit-->
 
-# scotmaps <img src="man/figures/readme/scotmaps-sticker.png" height="139" align="right"/>
+# scotmaps [<img src="man/figures/readme/scotmaps-sticker.png" height="139" align="right"/>](https://fozy81.github.io/scotmaps)
 
 ### Version 0.0.0.1
 
